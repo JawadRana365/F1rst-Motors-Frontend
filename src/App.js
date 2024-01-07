@@ -1,24 +1,35 @@
-import logo from './logo.svg';
 import './App.css';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import Login from './pages/authentication/Login';
+import ProductsListing from './pages/products/ProductsListing';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
+import { setToken } from './redux/admin/tokenSlice';
+import CreateProduct from './pages/products/CreateProduct';
+import ProductDetails from './pages/products/ProductDetails';
 
 function App() {
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(setToken(localStorage.getItem('loginToken')))
+  },[])
+  
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Router>
+        <Routes>
+          <Route exact path="/" element={<ProductsListing />} />
+          <Route path="/login" element={<Login />} />
+          <Route exact path="/add-product" element={<CreateProduct />} />
+          <Route exact path="/product/details/:id" element={<ProductDetails />} />
+        </Routes>
+      </Router>
+      <ToastContainer/>
+    </>
   );
 }
 
